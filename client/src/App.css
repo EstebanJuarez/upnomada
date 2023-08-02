@@ -1,0 +1,209 @@
+body {
+  font-family: Montserrat clasicc, sans-serif;
+}
+
+.test {
+  
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:svgjs='http://svgjs.dev/svgjs' width='1920' height='550' preserveAspectRatio='none' viewBox='0 0 1920 650 '%3e%3cg mask='url(%26quot%3b%23SvgjsMask1424%26quot%3b)' fill='none'%3e%3crect width='1920' height='350' x='0' y='0' fill='rgba(255%2c 200%2c 69%2c 1)'%3e%3c/rect%3e%3cpath d='M2080 350L0 350 L0 436.45Q-72.38 268.06%2c 96 195.68Q145.44 85.12%2c 256 134.56Q374.72 93.28%2c 416 212Q482.66 182.66%2c 512 249.32Q580.75 158.07%2c 672 226.83Q727.1 121.93%2c 832 177.03Q954.33 139.36%2c 992 261.69Q1072.89 246.59%2c 1088 327.48Q1192.79 272.27%2c 1248 377.07Q1275.44 244.51%2c 1408 271.95Q1443.25 147.2%2c 1568 182.45Q1596.73 115.18%2c 1664 143.91Q1694.05 77.96%2c 1760 108.01Q1885.02 73.03%2c 1920 198.05Q2096.18 214.24%2c 2080 390.42z' fill='rgba(255%2c 255%2c 255%2c 1)'%3e%3c/path%3e%3c/g%3e%3cdefs%3e%3cmask id='SvgjsMask1424'%3e%3crect width='1920' height='350' fill='white'%3e%3c/rect%3e%3c/mask%3e%3c/defs%3e%3c/svg%3e");
+}
+
+@media (max-width: 768px) {
+  .test {
+    /* Estilos para el fondo en dispositivos móviles */
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:svgjs='http://svgjs.dev/svgjs' width='768' height='350' preserveAspectRatio='none' viewBox='0 0 768 350'%3e%3cg mask='url(%26quot%3b%23SvgjsMask1593%26quot%3b)' fill='none'%3e%3crect width='768' height='350' x='0' y='0' fill='rgba(255%2c 200%2c 69%2c 1)'%3e%3c/rect%3e%3cpath d='M793.5999999999999 350L0 350 L0 291.86Q24.19 252.05%2c 64 276.24Q118.57 266.81%2c 128 321.39Q170.87 300.26%2c 192 343.13Q192.93 305.66%2c 230.4 306.58Q234.75 272.53%2c 268.8 276.87Q290.31 234.38%2c 332.8 255.88Q357.12 241.8%2c 371.20000000000005 266.11Q409.77 266.28%2c 409.6 304.85Q467.76 299.01%2c 473.6 357.18Q519.62 339.2%2c 537.6 385.22Q551.55 360.78%2c 576 374.73Q581.47 341.79%2c 614.4 347.26Q622.45 316.92%2c 652.8 324.97Q659.2 267.37%2c 716.8 273.77Q726.99 245.56%2c 755.1999999999999 255.75Q835.84 297.99%2c 793.5999999999999 378.63z' fill='rgba(255%2c 255%2c 255%2c 1)'%3e%3c/path%3e%3c/g%3e%3cdefs%3e%3cmask id='SvgjsMask1593'%3e%3crect width='768' height='350' fill='white'%3e%3c/rect%3e%3c/mask%3e%3c/defs%3e%3c/svg%3e");  }
+}
+
+.react-calendar {
+  width: 45rem;
+  max-width: 100%;
+  background: white;
+  border: 1px solid #a0a0961f;
+  border-radius: 10px;
+  display: inline-block;
+}
+
+.react-calendar--doubleView {
+  width: 800px;
+}
+
+.react-calendar--doubleView .react-calendar__viewContainer {
+  display: flex;
+  margin: -0.5em;
+}
+
+.react-calendar--doubleView .react-calendar__viewContainer>* {
+  width: 50%;
+  margin: 0.5em;
+}
+
+.react-calendar,
+.react-calendar *,
+.react-calendar *:before,
+.react-calendar *:after {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.react-calendar button {
+  margin: 10px;
+  border-radius: 10px;
+  border: 0;
+  outline: none;
+}
+
+.high {
+
+  background-color: rgb(255, 80, 80) !important;
+}
+
+.tile.high,
+.tile.low,
+.tile.medium {
+  margin-top: 0.25rem;
+  font-size: small;
+  color: white;
+}
+
+.medium {
+
+  background-color: rgb(255, 199, 94) !important;
+}
+
+.low {
+
+  background-color: rgb(54, 238, 54) !important;
+}
+
+.react-calendar button:enabled:hover {
+  cursor: pointer;
+}
+
+.react-calendar__navigation {
+  gap: 20px;
+  /* Ajusta el espaciado entre los botones de navegación */
+  display: flex;
+  height: 44px;
+  margin-bottom: 1em;
+}
+
+.react-calendar__navigation button {
+  min-width: 44px;
+  background: none;
+}
+
+.react-calendar__navigation button:disabled {
+  background-color: #f0f0f0;
+}
+
+.react-calendar__navigation button:enabled:hover,
+.react-calendar__navigation button:enabled:focus {
+  background-color: #e6e6e6;
+}
+
+.react-calendar__month-view__weekdays {
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 0.75em;
+}
+
+.react-calendar__month-view__weekdays__weekday {
+  padding: 0.5em;
+}
+
+.react-calendar__month-view__weekNumbers .react-calendar__tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75em;
+  font-weight: bold;
+}
+
+.react-calendar__month-view__days__day--weekend {}
+
+.react-calendar__month-view__days__day--neighboringMonth {
+  color: #c42b2b;
+  opacity: 0.7;
+}
+
+.react-calendar__year-view .react-calendar__tile,
+.react-calendar__decade-view .react-calendar__tile,
+.react-calendar__century-view .react-calendar__tile {
+  padding: 2em 0.5em;
+}
+
+.react-calendar__tile {
+  max-width: 100%;
+  padding: 15px 10px;
+  /* Ajusta el espaciado interno de las fechas */
+  background: none;
+  text-align: center;
+  line-height: 16px;
+}
+
+.react-calendar__tile:disabled {
+  background-color: #f0f0f0;
+}
+
+.react-calendar__tile:enabled:hover,
+.react-calendar__tile:enabled:focus {
+  background-color: #e6e6e6;
+}
+
+.react-calendar__tile--now {
+  background: #ffff76;
+}
+
+.react-calendar__tile--now:enabled:hover,
+.react-calendar__tile--now:enabled:focus {
+  background: #ffffa9;
+}
+
+.react-calendar__tile--hasActive {
+  background: #1b6dbe;
+}
+
+.react-calendar__tile--hasActive:enabled:hover,
+.react-calendar__tile--hasActive:enabled:focus {
+  background: #a9d4ff;
+}
+
+.react-calendar__tile--active:enabled:hover,
+.react-calendar__tile--active:enabled:focus {
+  background: #94a2b1;
+}
+
+.react-calendar--selectRange .react-calendar__tile--hover {
+  background-color: #e6e6e6;
+}
+
+.react-calendar .selected {
+  background-color: #41a0ff !important;
+}
+
+
+.react-calendar__month-view__days {
+  display: grid !important;
+  grid-template-columns: 14.2% 14.2% 14.2% 14.2% 14.2% 14.2% 14.2%;
+}
+
+
+.react-calendar__tile {
+  max-width: initial !important;
+}
+
+.react-calendar__year-view__months,
+.react-calendar__decade-view__years,
+.react-calendar__century-view__decades {
+  display: grid !important;
+  grid-template-columns: 20% 20% 20% 20% 20%;
+}
+
+.react-calendar__year-view__months {
+  grid-template-columns: 33.3% 33.3% 33.3%;
+}
+
+.react-calendar__tile {
+  max-width: initial !important;
+}

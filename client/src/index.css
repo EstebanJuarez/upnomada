@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('../public/fonts/Montserrat-VariableFont_wght.ttf') format('truetype');
+  /* Otras propiedades de la fuente (weight, style, etc.) */
+}
+
+@font-face {
+  font-family: 'Cooper-regular';
+  src: url('../public/fonts/CooperLtBT-Regular.ttf') format('truetype');
+  /* Otras propiedades de la fuente (weight, style, etc.) */
+}
+
+
+@font-face {
+  font-family: 'Cooper-bold';
+  src: url('../public/fonts/CooperLtBT-Bold.ttf') format('truetype');
+  /* Otras propiedades de la fuente (weight, style, etc.) */
+}
+
+/* Resto de estilos */
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: Cooper-regular, sans-serif;
+}
+
+
+
+body {
+  margin: 0;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
