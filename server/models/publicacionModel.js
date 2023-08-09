@@ -23,6 +23,10 @@ const Publicacion = db.define('publicaciones', {
         type: DataTypes.STRING,
         allowNull: true,
     },
+    titulo: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
     primeraFecha: {
         type: DataTypes.STRING,
         allowNull: false,

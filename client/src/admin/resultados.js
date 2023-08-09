@@ -13,6 +13,7 @@ const CompResultados = () => {
     const origenId = searchParams.get('origenId');
     const date = searchParams.get('date');
     const { origen } = useParams();
+    const token = localStorage.getItem('token');
     const [loading, setLoading] = useState(true);
 
 
@@ -20,7 +21,13 @@ const CompResultados = () => {
         const fetchData = async () => {
 
             try {
-                const res = await axios.post("http://localhost:5000/flights/searchEverywhere", { origen: origen });
+                const res = await axios.post("http://localhost:5000/flights/searchEverywhere", { origen: origen }, {
+                    headers: {
+                        'x-auth-token': token,
+                    },
+                });
+
+
                 console.log(res);
                 setData(res.data)
                 setLoading(false);
@@ -39,7 +46,7 @@ const CompResultados = () => {
 
 
     return (
-        <div >
+        <div className="flex flex-col  shadow-md p-16 mt-10 ml-56  bg-[#f8f9ff] max-w-8xl  ">
             <div className="m-5 p-4 bg-gray-100 rounded-lg shadow-md">
                 <h1 className="text-4xl text-center ">Elige un destino</h1>
             </div>

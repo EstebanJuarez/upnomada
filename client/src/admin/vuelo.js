@@ -24,7 +24,8 @@ const CompVuelo = () => {
   const [destinoId, setDestinoId] = useState(" ");
   const [selectedDate, setSelectedDate] = useState(new Date());
 
-  console.log(currentDateSelected);
+  const abortController = new AbortController();
+  const signal = abortController.signal;
   const fetchDataWithDate = async (newDate) => {
     try {
       setLoading(true);
@@ -35,7 +36,7 @@ const CompVuelo = () => {
         title: title,
         date: newDate, // Usamos la nueva fecha seleccionada
       };
-      const res = await axios.post("http://localhost:5000/flights", body);
+      const res = await axios.post("http://localhost:5000/flights", body, { signal });
       setSessionId(res.data.response.sessionId);
       setDestinoId(res.data.airport);
       setData(res.data.response.data.itineraries);
@@ -48,7 +49,14 @@ const CompVuelo = () => {
   };
 
   useEffect(() => {
+    setLoading(true);
     fetchDataWithDate(selectedDate);
+
+    // Cuando cambie una de las dependencias, aborta la solicitud anterior
+    return () => {
+      console.log("Cancelled");
+      abortController.abort();
+    };
   }, [origen, destino, origenId, title, selectedDate]);
 
 
@@ -57,42 +65,42 @@ const CompVuelo = () => {
 
 
   return (
-    <div className="container mx-auto">
+    <div className="flex flex-col  shadow-md p-16 mt-10 ml-56  bg-[#f8f9ff] max-w-8xl  ">
     <CompCalendar onDateChange={fetchDataWithDate} />
 
-    {loading ? (
-      <p>Cargando...</p>
-    ) : (
-      <div>
-        {currentDateSelected && (
-          <h1 className="text-xl font-bold my-4">Fecha seleccionada: {currentDateSelected}</h1>
-        )}
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 ">
-          {Array.isArray(data) && data.length > 0 ? (
-            data.map((resultado, index) => (
-              <div key={index} className="border p-4 rounded shadow-md">
-                {resultado.legs.map((leg, i) => (
-                  <div key={i} className="flex flex-col items-center mb-4 rounded">
-                    <img className="w-12 mb-2" src={leg.carriers.marketing[0].logoUrl} alt="Airline logo" />
-                    <span className="font-bold text-lg">{resultado.price.formatted}</span>
-                    <span>{leg.origin.name} ➔ {leg.destination.name}</span>
-                    <span>Salida: {leg.departure}</span>
-                    <span>Llegada: {leg.arrival}</span>
-                    <Link target="_blank" to={`/admin/elegir-vuelo/${leg.origin.id}/${leg.destination.id}?origenId=${origenId}&date=${currentDateSelected}&dateArrival=${leg.arrival}&sessionId=${sessionId}&id=${resultado.id}&destinoId=${destinoId}`} className="mt-4 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded">
-                      Ver detalles
-                    </Link>
-                  </div>
-                ))}
-              </div>
-            ))
-          ) : (
-            <p>Los datos no son válidos.</p>
+      {loading ? (
+        <p>Cargando...</p>
+      ) : (
+        <div>
+          {currentDateSelected && (
+            <h1 className="text-xl font-bold my-4">Fecha seleccionada: {currentDateSelected}</h1>
           )}
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 ">
+            {Array.isArray(data) && data.length > 0 ? (
+              data.map((resultado, index) => (
+                <div key={index} className="border p-4 rounded shadow-md">
+                  {resultado.legs.map((leg, i) => (
+                    <div key={i} className="flex flex-col items-center mb-4 rounded">
+                      <img className="w-12 mb-2" src={leg.carriers.marketing[0].logoUrl} alt="Airline logo" />
+                      <span className="font-bold text-lg">{resultado.price.formatted}</span>
+                      <span>{leg.origin.name} ➔ {leg.destination.name}</span>
+                      <span>Salida: {leg.departure}</span>
+                      <span>Llegada: {leg.arrival}</span>
+                      <Link target="_blank" to={`/admin/elegir-vuelo/${leg.origin.id}/${leg.destination.id}?origenId=${origenId}&date=${currentDateSelected}&dateArrival=${leg.arrival}&sessionId=${sessionId}&id=${resultado.id}&destinoId=${destinoId}`} className="mt-4 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded">
+                        Ver detalles
+                      </Link>
+                    </div>
+                  ))}
+                </div>
+              ))
+            ) : (
+              <p>Los datos no son válidos.</p>
+            )}
+          </div>
         </div>
-      </div>
-    )}
-  </div>
+      )}
+    </div>
   );
 
 };

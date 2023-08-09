@@ -1,30 +1,36 @@
 
-import React, { useState, useEffect } from "react";
+import React from "react";
+import Popup from "../popup/popup.js";
+import CompPopContainer from "../popup/popupContainer";
 import { useLocation, Link, useNavigate, } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faInfoCircle, faUser } from "@fortawesome/free-solid-svg-icons";
+
 
 const CompNavbar = () => {
+    const location = useLocation()
 
+    const shouldRender = !location.pathname.startsWith("/admin") ;
 
-
+    if (!shouldRender) {
+        return null;
+    }
     return (
-        <div>
-            <div className="flex items-center justify-between gap-5 bg-jaune p-4 h-20">
+        <div className="bg-jaune">
+            <div className="flex items-center justify-between gap-5 p-4 h-20">
+
                 <div className="">
                     <Link to={'/'} className="text-3xl text-bleu font-[Cooper-bold]">Upnomada</Link>
                 </div>
                 <div className="flex gap-10 text-xl ">
-                    <span className="">    Más info  </span>
+                    <span className="text-white">    Más info  </span>
                     <button className="">
-                        <FontAwesomeIcon icon={faUser} className="mr-2" />
+                        <Popup>
+                            <CompPopContainer></CompPopContainer>
+                        </Popup>
                     </button>
                 </div>
-            </div>
-
-            <div className="test h-80">
 
             </div>
+
         </div>
     );
 }

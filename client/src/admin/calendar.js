@@ -6,9 +6,9 @@ import { useParams } from 'react-router-dom';
 import { format, startOfDay } from 'date-fns';
 import Calendar from 'react-calendar';
 import CompVuelo from "./vuelo";
-const CompCalendar = ({onDateChange }) => {
+const CompCalendar = ({ onDateChange }) => {
 
-    
+
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const [data, setData] = useState({});
@@ -16,23 +16,32 @@ const CompCalendar = ({onDateChange }) => {
 
     const origenId = searchParams.get('origenId');
     const date = searchParams.get('date');
-
+    const [selectedDate, setSelectedDate] = useState(date);
 
     useEffect(() => {
+        // Creamos una función de cancelación usando una fuente de cancelación
+        const source = axios.CancelToken.source();
+
         const fetchData = async () => {
             try {
                 const body = { origen: origen, destino: destino, date: date };
-                const res = await axios.post("http://localhost:5000/flights/getPriceCalendar", body);
-                console.log(res.data);
-                setData(res.data.data.flights.days)
+                const res = await axios.post("http://localhost:5000/flights/getPriceCalendar", body, {
+                    cancelToken: source.token // Asignamos la fuente de cancelación a la solicitud
+                });
+                setData(res.data.data.flights.days);
             } catch (error) {
                 console.log(error);
             }
         };
-        fetchData();
-    }, []);
 
-    const [selectedDate, setSelectedDate] = useState(date);
+        fetchData();
+
+        // Limpieza del useEffect para cancelar la solicitud si el componente se desmonta antes de que finalice
+        return () => {
+            source.cancel('Request canceled by user.'); // Cancelamos la solicitud con un mensaje opcional
+        };
+    }, [selectedDate, origen, destino]);
+
 
 
     // Función para mostrar el calendario con colores para cada fecha según su grupo

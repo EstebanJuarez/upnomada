@@ -7,7 +7,9 @@ import axios from "axios";
 
 function Carrito() {
 
+    const token = localStorage.getItem("token");
     const [titulo, setTitulo] = useState("");
+    const [descripcion, setDescripcion] = useState("");
     const [imagen, setImagen] = useState("");
 
     const { carrito, eliminarDelCarrito, vaciarCarrito, calcularTotal, setCarrito } =
@@ -58,12 +60,16 @@ function Carrito() {
                 carrito: carrito,
                 titulo,
                 imagen,
+                descripcion,
                 primeraFecha,
                 ultimaFecha,
             };
             try {
-                const response = await axios.post(url, data);
-
+                const response = await axios.post(url, data, {
+                    headers: {
+                        'x-auth-token': token,
+                    },
+                });
                 console.log(response.data);
                 alert("Publicación creada con éxito");
             } catch (error) {
@@ -82,9 +88,23 @@ function Carrito() {
 
     };
 
+    const handleDescripcion = (event) => {
+        setDescripcion(event.target.value);
+    };
+
+
+    const handleVueloDescripcionChange = (id, nuevaDescripcion) => {
+        const newCarrito = carrito.map((producto) =>
+            producto.id === id ? { ...producto, vueloDescripcion: nuevaDescripcion } : producto
+        );
+        setCarrito(newCarrito);
+        console.log(carrito);
+    };
+
+
     useEffect(() => {
         actualizarFechas()
-    }, [carrito,ultimaFechaSegmento]);
+    }, [carrito.length, ultimaFechaSegmento]);
 
     const SegmentoVuelo = ({ segment }) => {
         const splitArrival = segment.arrival.split("T");
@@ -117,7 +137,7 @@ function Carrito() {
 
 
     return (
-        <div className="container mx-auto px-4 mt-10">
+        <div className="flex flex-col  shadow-md p-16 mt-10 ml-56  bg-[#f8f9ff] max-w-8xl  ">
             <h1 className="text-4xl font-bold mb-6">Trip</h1>
             <p>Fecha de inicio del viaje: {primeraFecha}</p>
             <p>Fecha de fin del viaje: {ultimaFecha}</p>
@@ -132,13 +152,23 @@ function Carrito() {
                 />
             </label>
 
-            <label htmlFor="titulo" className="flex flex-col">
+            <label htmlFor="imagen" className="flex flex-col">
                 Imagen
                 <input
                     className="border rounded-md max-w-xs px-2 py-1 mt-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    id="titulo"
+                    id="imagen"
                     value={imagen}
-                    onChange={handleTituloChange}
+                    onChange={handleImagenChange}
+                />
+            </label>
+
+            <label htmlFor="descripcion" className="flex flex-col">
+                Descripción
+                <input
+                    className="border rounded-md max-w-xs px-2 py-1 mt-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    id="descripcion"
+                    value={descripcion}
+                    onChange={handleDescripcion}
                 />
             </label>
 
@@ -148,7 +178,17 @@ function Carrito() {
                 {carrito.map((producto) => (
                     <div key={producto.id} className="bg-white shadow-md rounded-lg p-4">
                         <div className="mb-2">
+                            <div className="mb-4 flex flex-col items-center" >
+                                <span className="font-bold">Descripción del vuelo:</span>
+                                <textarea
+                                    className="border rounded-md max-w-xs px-2 py-1 mt-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    value={producto.vueloDescripcion}
+                                    onChange={(event) => handleVueloDescripcionChange(producto.id, event.target.value)}
+                                />
+
+                            </div>
                             <span className="font-bold">Recorrido:</span>
+
                             <span className="ml-2">
                                 {producto.segments.map((segment) => segment.origen).join(" - ")}
                             </span>
@@ -157,7 +197,7 @@ function Carrito() {
                                 {producto.segments.map((segment) => segment.destino).join(" - ")}
                             </span>
                         </div>
-                        <div className="mb-4">
+                        <div className="mb-4 flex flex-col items-center">
                             <Link to={producto.url} target="_blank">
                                 <img
                                     src={producto.imagen}
@@ -165,7 +205,8 @@ function Carrito() {
                                     className="w-32 h-32 object-cover mx-auto"
                                 />
                             </Link>
-                            <button onClick={() => handleImagenChange(producto.imagen)}>Seleccionar imagen</button>
+                            <button onClick={() => handleImagenChange(producto.imagen)} className="text-sm px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                            >Seleccionar imagen</button>
                         </div>
                         <div>
                             <p className="font-bold mb-2">Precio: ${producto.precio}</p>
@@ -201,7 +242,7 @@ function Carrito() {
                             onClick={crearPublicacion}
                             className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
                         >
-                            Ir a la compra
+                            Crear publicación
                         </button>
                     </div>
                 </>

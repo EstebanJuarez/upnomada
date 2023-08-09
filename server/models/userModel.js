@@ -4,7 +4,6 @@ import db from "../database/db.js";
 
 import { DataTypes } from "sequelize";
 import bcrypt from 'bcrypt'
-import UsuariosDetalles from "./userDetallesModel.js";
 
 
 const User = db.define('usuarios', {
@@ -29,28 +28,31 @@ const User = db.define('usuarios', {
     },
     password_user: {
         type: DataTypes.STRING,
+        allowNull: false
+    },
+    telefono_user: {
+        type: DataTypes.STRING,
         allowNull: true
     },
     role: {
         type: DataTypes.STRING,
         allowNull: true // cambiar en prod
-
-
+    },
+    status: {
+        type: DataTypes.STRING,
+        allowNull: true // cambiar en prod
+    },
+    customer_id: {
+        type: DataTypes.STRING,
+        allowNull: true // cambiar en prod
     }
 });
 
 
-User.hasOne(UsuariosDetalles, {
-    foreignKey: 'id_user',
-    onDelete: 'CASCADE'
-});
 
 User.beforeCreate(async (user) => {
-    if (user.role !== 'guest') {
-        return await bcrypt.hash(user.password_user, 10).then((password) => {
-            user.password_user = password;
-        });
-    }
+    // Siempre se realizará el hashing de la contraseña
+    user.password_user = await bcrypt.hash(user.password_user, 10);
 });
 
 export default User

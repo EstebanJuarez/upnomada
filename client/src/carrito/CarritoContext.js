@@ -67,7 +67,6 @@ export const CarritoProvider = (props) => {
 
   useEffect(() => {
     const carritoGuardado = localStorage.getItem("carrito");
-    console.log("get del segundo" + localStorage.getItem("carrito"));
     if (carritoGuardado) {
       setCarrito(JSON.parse(carritoGuardado));
     }

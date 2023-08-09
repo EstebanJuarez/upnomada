@@ -33,7 +33,7 @@ const CompResultado = () => {
 
     return (
 
-        <div>
+        <div className="flex flex-col  shadow-md p-16 mt-10 ml-56  bg-[#f8f9ff] max-w-8xl  ">
             <div className="m-5 p-4 bg-gray-100 rounded-lg shadow-md">
                 <h1 className="text-4xl text-center ">Elige una ciudad</h1>
             </div>

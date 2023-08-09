@@ -2,15 +2,86 @@ body {
   font-family: Montserrat clasicc, sans-serif;
 }
 
-.test {
-  
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:svgjs='http://svgjs.dev/svgjs' width='1920' height='550' preserveAspectRatio='none' viewBox='0 0 1920 650 '%3e%3cg mask='url(%26quot%3b%23SvgjsMask1424%26quot%3b)' fill='none'%3e%3crect width='1920' height='350' x='0' y='0' fill='rgba(255%2c 200%2c 69%2c 1)'%3e%3c/rect%3e%3cpath d='M2080 350L0 350 L0 436.45Q-72.38 268.06%2c 96 195.68Q145.44 85.12%2c 256 134.56Q374.72 93.28%2c 416 212Q482.66 182.66%2c 512 249.32Q580.75 158.07%2c 672 226.83Q727.1 121.93%2c 832 177.03Q954.33 139.36%2c 992 261.69Q1072.89 246.59%2c 1088 327.48Q1192.79 272.27%2c 1248 377.07Q1275.44 244.51%2c 1408 271.95Q1443.25 147.2%2c 1568 182.45Q1596.73 115.18%2c 1664 143.91Q1694.05 77.96%2c 1760 108.01Q1885.02 73.03%2c 1920 198.05Q2096.18 214.24%2c 2080 390.42z' fill='rgba(255%2c 255%2c 255%2c 1)'%3e%3c/path%3e%3c/g%3e%3cdefs%3e%3cmask id='SvgjsMask1424'%3e%3crect width='1920' height='350' fill='white'%3e%3c/rect%3e%3c/mask%3e%3c/defs%3e%3c/svg%3e");
+.parallax {
+  height: 50rem;
+  background-image: url(http://localhost:5000/bk.jpg);
+  background-size: cover;
+  /* Ajustar la imagen para cubrir todo el contenedor */
+  background-position: center;
+  /* Centrar la imagen en el contenedor */
+  text-shadow: 3px 3px 4px rgb(0, 0, 0);
+
 }
 
-@media (max-width: 768px) {
-  .test {
-    /* Estilos para el fondo en dispositivos móviles */
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:svgjs='http://svgjs.dev/svgjs' width='768' height='350' preserveAspectRatio='none' viewBox='0 0 768 350'%3e%3cg mask='url(%26quot%3b%23SvgjsMask1593%26quot%3b)' fill='none'%3e%3crect width='768' height='350' x='0' y='0' fill='rgba(255%2c 200%2c 69%2c 1)'%3e%3c/rect%3e%3cpath d='M793.5999999999999 350L0 350 L0 291.86Q24.19 252.05%2c 64 276.24Q118.57 266.81%2c 128 321.39Q170.87 300.26%2c 192 343.13Q192.93 305.66%2c 230.4 306.58Q234.75 272.53%2c 268.8 276.87Q290.31 234.38%2c 332.8 255.88Q357.12 241.8%2c 371.20000000000005 266.11Q409.77 266.28%2c 409.6 304.85Q467.76 299.01%2c 473.6 357.18Q519.62 339.2%2c 537.6 385.22Q551.55 360.78%2c 576 374.73Q581.47 341.79%2c 614.4 347.26Q622.45 316.92%2c 652.8 324.97Q659.2 267.37%2c 716.8 273.77Q726.99 245.56%2c 755.1999999999999 255.75Q835.84 297.99%2c 793.5999999999999 378.63z' fill='rgba(255%2c 255%2c 255%2c 1)'%3e%3c/path%3e%3c/g%3e%3cdefs%3e%3cmask id='SvgjsMask1593'%3e%3crect width='768' height='350' fill='white'%3e%3c/rect%3e%3c/mask%3e%3c/defs%3e%3c/svg%3e");  }
+
+
+/* Agrega un contenedor para el modal */
+.modal-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.8);
+  /* Fondo oscuro con transparencia */
+  z-index: 9999;
+  /* Asegura que el modal esté por encima de otros elementos */
+}
+
+/* Animación para pantallas más grandes (no móviles) */
+@keyframes volar {
+  0% {
+    transform: translateX();
+    opacity: 0;
+  }
+
+  15% {
+    opacity: 1;
+  }
+
+  95% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(80vw);
+  }
+}
+
+/* Estilos para dispositivos móviles (ancho de pantalla máximo de 600px) */
+@media screen and (max-width: 600px) {
+  @keyframes volar-mobile {
+    0% {
+      transform: translateX();
+      opacity: 0;
+    }
+
+    15% {
+      opacity: 1;
+    }
+    95% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      transform: translateX(40vw);
+    }
+  }
+}
+
+/* Clase para el elemento que deseas animar */
+.avion {
+  /* Animación para pantallas más grandes (no móviles) */
+  animation: volar 3s ease-in forwards;
+
+  /* Animación para dispositivos móviles */
+  @media screen and (max-width: 600px) {
+    animation: volar-mobile 2s ease-in forwards;
+  }
 }
 
 .react-calendar {
@@ -206,4 +277,151 @@ body {
 
 .react-calendar__tile {
   max-width: initial !important;
+}
+
+
+
+.popup {
+  min-width: 10vw;
+  min-height: 5vw;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 999;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 998;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+.app-title {
+  text-align: center;
+  color: #777;
+}
+
+.login-form {
+
+  text-align: center;
+}
+
+.login-group {
+  padding: 10px;
+}
+
+.login-field {
+  text-align: center;
+  background-color: #ECF0F1;
+  border: 2px solid transparent;
+  border-radius: 3px;
+  font-size: 16px;
+  font-weight: 200;
+  padding: 10px 0;
+  width: 250px;
+  transition: border .5s;
+}
+
+input:focus {
+  border: 2px solid #3498DB !important;
+  box-shadow: none !important;
+}
+
+.btn-ingresar {
+  border: 2px solid transparent !important;
+  background: #3498DB !important;
+  color: #ffffff !important;
+  font-size: 16px !important;
+  line-height: 25px !important;
+  padding: 0 !important;
+  text-decoration: none !important;
+  text-shadow: none !important;
+  border-radius: 3px !important;
+  box-shadow: none !important;
+  transition: 0.25s !important;
+  display: block !important;
+  width: 250px !important;
+  margin: 0 auto !important;
+}
+
+.btn-ingresar:hover {
+  background-color: #2980B9 !important;
+}
+
+.login-link {
+  text-decoration: none;
+  font-size: 12px;
+  color: #444;
+  display: block;
+  margin-top: 12px;
+}
+
+
+
+.buttons-container {
+  display: flex;
+  gap: 20px;
+  flex-direction: column;
+  width: 200px;
+}
+
+
+.mis-compras-btn {
+
+
+  height: 3em;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+  transition: .4s ease-in-out;
+  box-shadow: 1px 1px 3px #b5b5b5,
+    -1px -1px 3px #ffffff;
+}
+
+.mis-compras-btn:hover {
+  background-color: rgba(9, 255, 0, 0.479);
+
+}
+
+.mis-compras-btn:active {
+  box-shadow: inset 3px 3px 6px #b5b5b5,
+    inset -3px -3px 6px #ffffff;
+}
+
+.logout-btn {
+  height: 3em;
+  border-radius: 5px;
+  border: none;
+  background-color: rgba(255, 0, 0, 0.253);
+  outline: none;
+  transition: .4s ease-in-out;
+  box-shadow: 1px 1px 3px #b5b5b5,
+    -1px -1px 3px #ffffff;
 }

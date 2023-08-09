@@ -1,16 +1,17 @@
 import axios from "axios"
 
+import dotenv from 'dotenv';
+dotenv.config();
 
-
+const scanner = process.env.SCANNER;
 export const searchAirport = async (destino, title) => {
 
     const options = {
         method: 'GET',
-        url: 'https://skyscanner50.p.rapidapi.com/api/v2/searchAirport',
+        url: 'https://api1.diversesaga.com/api/v2/searchAirport',
         params: { query: destino },
         headers: {
-            'X-RapidAPI-Key': 'a69b8b623dmsh0ab04d0392da806p1e8c31jsna24709fe9b09',
-            'X-RapidAPI-Host': 'skyscanner50.p.rapidapi.com',
+            'Authorization': scanner,
         },
     };
     try {
@@ -22,12 +23,11 @@ export const searchAirport = async (destino, title) => {
             if (title) {
                 const optionsWithTitle = {
                     method: 'GET',
-                    url: 'https://skyscanner50.p.rapidapi.com/api/v2/searchAirport',
+                    url: 'https://api1.diversesaga.com/api/v2/searchAirport',
                     params: { query: title },
                     headers: {
-                        'X-RapidAPI-Key': 'a69b8b623dmsh0ab04d0392da806p1e8c31jsna24709fe9b09',
-                        'X-RapidAPI-Host': 'skyscanner50.p.rapidapi.com',
-                    },
+                        'Authorization': scanner,
+                     },
                 };
 
                 const responseWithTitle = await axios.request(optionsWithTitle);
@@ -86,7 +86,7 @@ export const searchFlights = async (req, res) => {
     //
     const options = {
         method: 'GET',
-        url: 'https://skyscanner50.p.rapidapi.com/api/v2/searchFlights',
+        url: 'https://api1.diversesaga.com/api/v2/searchFlights',
         params: {
             originSkyId: origen,
             originEntityId: origenId,
@@ -97,14 +97,13 @@ export const searchFlights = async (req, res) => {
             currency: 'USD'
         },
         headers: {
-            'X-RapidAPI-Key': 'a69b8b623dmsh0ab04d0392da806p1e8c31jsna24709fe9b09',
-            'X-RapidAPI-Host': 'skyscanner50.p.rapidapi.com'
-        }
+            'Authorization': scanner,
+         },
     };
 
     try {
         const response = await axios.request(options);
-        return res.status(200).json({ response: response.data, airport:airportAndCityEntityIds[0] });
+        return res.status(200).json({ response: response.data, airport: airportAndCityEntityIds[0] });
 
     } catch (error) {
 
@@ -121,16 +120,15 @@ export const searchFlightEverywhere = async (req, res) => {
     const origen = req.body.origen
     const options = {
         method: 'GET',
-        url: 'https://skyscanner50.p.rapidapi.com/api/v2/searchFlightEverywhere',
+        url: 'https://api1.diversesaga.com/api/v2/searchFlightEverywhere',
         params: {
             originSkyId: origen,
             oneWay: 'false',
             currency: 'USD'
         },
         headers: {
-            'X-RapidAPI-Key': 'a69b8b623dmsh0ab04d0392da806p1e8c31jsna24709fe9b09',
-            'X-RapidAPI-Host': 'skyscanner50.p.rapidapi.com'
-        }
+            'Authorization': scanner,
+         },
     };
 
     try {
@@ -142,7 +140,7 @@ export const searchFlightEverywhere = async (req, res) => {
         res.json(flightData); // Envía los datos procesados como respuesta en formato JSON.
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Error al buscar vuelos en todas partes.' , error});
+        res.status(500).json({ error: 'Error al buscar vuelos en todas partes.', error });
     }
 };
 
@@ -153,7 +151,7 @@ export const searchFlightEverywhereDetails = async (req, res) => {
 
     const options = {
         method: 'GET',
-        url: 'https://skyscanner50.p.rapidapi.com/api/v2/searchFlightEverywhereDetails',
+        url: 'https://api1.diversesaga.com/api/v2/searchFlightEverywhereDetails',
         params: {
             originSkyId: origen,
             CountryId: destino,
@@ -161,9 +159,8 @@ export const searchFlightEverywhereDetails = async (req, res) => {
             currency: 'USD'
         },
         headers: {
-            'X-RapidAPI-Key': 'a69b8b623dmsh0ab04d0392da806p1e8c31jsna24709fe9b09',
-            'X-RapidAPI-Host': 'skyscanner50.p.rapidapi.com'
-        }
+            'Authorization': scanner,
+         },
     };
 
     try {
@@ -183,7 +180,7 @@ export const getFlightDetails = async (req, res) => {
     const { origen, destino, id, sessionId, date } = req.body;
     const options = {
         method: 'GET',
-        url: 'https://skyscanner50.p.rapidapi.com/api/v2/getFlightDetails',
+        url: 'https://api1.diversesaga.com/api/v2/getFlightDetails',
         params: {
             itineraryId: id,
             legs: `[{"destination":"${destino}","origin":"${origen}","date":"${date}"}]`,
@@ -192,9 +189,8 @@ export const getFlightDetails = async (req, res) => {
             currency: 'USD'
         },
         headers: {
-            'X-RapidAPI-Key': 'a69b8b623dmsh0ab04d0392da806p1e8c31jsna24709fe9b09',
-            'X-RapidAPI-Host': 'skyscanner50.p.rapidapi.com'
-        }
+            'Authorization': scanner,
+         },
     };
 
     try {
@@ -215,7 +211,7 @@ export const searchFlightsMultiStops = async (req, res) => {
 
     const options = {
         method: 'GET',
-        url: 'https://skyscanner50.p.rapidapi.com/api/v2/searchFlightsMultiStops',
+        url: 'https://api1.diversesaga.com/api/v2/searchFlightsMultiStops',
         params: {
             legs: '[{"origin":"LHR","originEntityId":"95565050","destination":"JFK","destinationEntityId":"95565058","date":"2024-01-07"},{"originEntityId":"95565058","destination":"LHR","destinationEntityId":"95565050","origin":"JFK","date":"2024-01-12"}]',
             adults: '1',
@@ -223,9 +219,8 @@ export const searchFlightsMultiStops = async (req, res) => {
             currency: 'USD'
         },
         headers: {
-            'X-RapidAPI-Key': 'a69b8b623dmsh0ab04d0392da806p1e8c31jsna24709fe9b09',
-            'X-RapidAPI-Host': 'skyscanner50.p.rapidapi.com'
-        }
+            'Authorization': scanner,
+         },
     };
 
     try {
@@ -246,7 +241,7 @@ export const getPriceCalendar = async (req, res) => {
 
     const options = {
         method: 'GET',
-        url: 'https://skyscanner50.p.rapidapi.com/api/v2/getPriceCalendar',
+        url: 'https://api1.diversesaga.com/api/v2/getPriceCalendar',
         params: {
             originSkyId: origen,
             destinationSkyId: destino,
@@ -254,9 +249,8 @@ export const getPriceCalendar = async (req, res) => {
             currency: 'USD'
         },
         headers: {
-            'X-RapidAPI-Key': 'a69b8b623dmsh0ab04d0392da806p1e8c31jsna24709fe9b09',
-            'X-RapidAPI-Host': 'skyscanner50.p.rapidapi.com'
-        }
+            'Authorization': scanner,
+         },
     };
     try {
         const response = await axios.request(options);

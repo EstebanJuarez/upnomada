@@ -9,7 +9,7 @@ const roleRoute = express.Router();
 roleRoute.get("/role", authMiddleware, async (req, res) => {
   try {
     const user = await User.findByPk(req.user.id);
-    res.json({ role: user.role });
+    res.json({ role: user.role, status: user.status });
   } catch (error) {
     console.error(error);
     res.status(500).send("Server Error.");

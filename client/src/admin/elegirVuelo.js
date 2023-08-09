@@ -31,6 +31,7 @@ const CompElegirVuelo = () => {
 
 
   useEffect(() => {
+    let isCancelled = false
     setDateArrivalFormated(dateArrival.split('T')[0])
 
     const fetchData = async () => {
@@ -61,15 +62,26 @@ const CompElegirVuelo = () => {
           console.error('No se encontró la imagen del destino en la respuesta.');
           setImagen('imagen_predeterminada.jpg');
         }
+        if (!isCancelled) {
 
-        setData(responseData);
-        setLoading(false);
+          setData(responseData);
+          setLoading(false);
+
+        }
+
       } catch (error) {
         console.error(error);
         setLoading(false);
       }
     };
     fetchData();
+
+    return () => {
+      console.log("cancelled");
+      isCancelled = true
+    }
+
+
   }, [origen, destino, origenId, date, id]);
 
 
@@ -95,7 +107,7 @@ const CompElegirVuelo = () => {
 
   console.log(data);
   return (
-    <div className="mt-10">
+    <div className="flex flex-col  shadow-md p-16 mt-10 ml-56  bg-[#f8f9ff] max-w-8xl  ">
       {loading ? (
         <p className="text-center">Cargando...</p>
       ) : (
