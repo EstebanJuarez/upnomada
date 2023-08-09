@@ -103,7 +103,6 @@ function CompAddPublicacion() {
         setDescripcion(event.target.value);
     };
 
-    //FIXME: Añadir el descripcion de cada vuelo 
 
     const agregarVuelo = () => {
         if (vueloDescripcion && vueloURL) {
