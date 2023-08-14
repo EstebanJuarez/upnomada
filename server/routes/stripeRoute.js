@@ -3,7 +3,13 @@ import express from 'express'
 import jwt from "jsonwebtoken";
 import User from "../models/userModel.js";
 
-const stripe = new Stripe("sk_test_51NaQrxAzaBsx8xim1OGUlxBkATvhc38jcP7pcG0Pi5D7MoBfoVIV42hmvZDbMbvTF2F2tQrvtV9qGflefySq6Lr700uyv3vNUq");
+import dotenv from 'dotenv';
+dotenv.config();
+
+const stripeKey = process.env.STRIPE;
+
+
+const stripe = new Stripe(stripeKey);
 
 const stripeRoute = express.Router()
 
@@ -11,39 +17,48 @@ const localhost = 'http://localhost:3000';
 
 
 stripeRoute.post('/create-checkout-session', async (req, res) => {
-    const token = req.header("x-auth-token")
-    if (token) {
+    try {
+        const token = req.header("x-auth-token")
+        if (token) {
 
-        const decodedToken = jwt.verify(token, process.env.MI_CLAVE);
-        const customer_id = decodedToken.user.customer_id;
-        const session = await stripe.checkout.sessions.create({
-            line_items: [
-                {
-                    // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-                    price: 'price_1NasvmAzaBsx8ximxipRYlYm',
-                    quantity: 1,
-                },
-            ],
-            customer: customer_id,
-            mode: 'subscription',
-            success_url: `${localhost}?success=true`,
-            cancel_url: `${localhost}?canceled=true`,
-        });
+            const decodedToken = jwt.verify(token, process.env.MI_CLAVE);
+            const customer_id = decodedToken.user.customer_id;
+            const session = await stripe.checkout.sessions.create({
+                line_items: [
+                    {
+                        // price_1Nda4gAKu1qzzp0FkdFw3hd6
+                        // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
+                        price: 'price_1NdeVmAKu1qzzp0FhmzTKHAS',
+                        quantity: 1,
+                    },
+                ],
+                customer: customer_id,
+                mode: 'subscription',
+                success_url: `${localhost}?success=true`,
+                cancel_url: `${localhost}?canceled=true`,
+            });
 
-        res.status(201).send(session.url);
+            res.status(201).send(session.url);
 
+
+        }
+
+        else {
+            res.status(400).send("No logeado")
+        }
+
+
+    } catch (error) {
+        console.error(error);
+        res.status(400).send("Error en el servidor");
 
     }
-    else {
-        res.status(400).send("No logeado")
-    }
-
 
 });
 
 
 
-const endpointSecret = "whsec_83c892e4d3c10403563a17613ad94e5c59717466438f9d655de2f59bd5b7b103";
+const endpointSecret = "whsec_tzGXnpY60ABCbMKoKyo3robrL0BD6Zrs";
 
 // Configura el middleware para obtener el cuerpo sin procesar de la solicitud
 stripeRoute.post('/webhook', express.raw({ type: 'application/json' }), async (request, response) => {
@@ -142,8 +157,45 @@ stripeRoute.post('/webhook', express.raw({ type: 'application/json' }), async (r
 });
 
 
+stripeRoute.post('/cancel-subscription', async (req, res) => {
+    try {
+        const token = req.header("x-auth-token");
+        if (!token) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
 
+        const decodedToken = jwt.verify(token, process.env.MI_CLAVE);
+        const customerId = decodedToken.user.customer_id;
 
+        // Obtener las suscripciones del cliente
+        const customer = await stripe.customers.retrieve(customerId, {
+            expand: ['subscriptions'],
+        });
 
+        // Obtener el primer objeto de suscripción (puedes ajustar esto según tu lógica)
+        const subscription = customer.subscriptions.data[0];
+
+        if (!subscription) {
+            return res.status(404).json({ message: 'Subscription not found' });
+        }
+
+        // Cancelar la suscripción en Stripe
+        await stripe.subscriptions.update(subscription.id, {
+            cancel_at_period_end: true
+        });
+
+        // Actualizar el estado del usuario en tu base de datos
+        const user = await User.findOne({ where: { customer_id: customerId } });
+        if (user) {
+            user.status = "canceled";
+            await user.save();
+        }
+
+        return res.status(200).json({ message: 'Subscription canceled successfully' });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Server Error' });
+    }
+});
 
 export default stripeRoute

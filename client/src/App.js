@@ -21,7 +21,13 @@ import CompProductDisplay from './payment/productDisplay';
 import CompDashboard from './admin/dashboard';
 import CompAdminShowPublicaciones from './admin/adminShowPublicaciones';
 import CompAdminEditPublicacion from './admin/adminEditPublicacion';
+import CompAdminUsers from './admin/showUsuariosAdmin';
+import CompAdminAddUser from './admin/addUsuariosAdmin';
+import CompResetPass from './user/resetPass';
+import CompShowAllPublicaciones from './inicio/showAllPublicaciones';
+import CompShowProfile from './user/profile';
 import axios from 'axios';
+
 
 function App() {
 
@@ -39,14 +45,18 @@ function App() {
 
         setUserRole(res.data.role);
       } catch (error) {
-        // Si hay un error al cargar el rol, se puede manejar aquí
-        console.error('Error al cargar el rol del usuario:', error);
-        setUserRole("none")
+        if (error.response && error.response.status === 401) {
+          // Token expirado, borra el token del almacenamiento local
+          localStorage.removeItem('token');
+        } else {
+          console.error('Error al cargar el rol del usuario:', error);
+          setUserRole('none');
+        }
       }
-    };
-
+    }
     loadUserRole();
   }, []);
+
   return (
     <BrowserRouter>
       <div className="App">
@@ -55,6 +65,8 @@ function App() {
           <CompBuscador />
           <Routes>
             <Route path='/' element={<CompShowPublicaciones />} />
+            <Route path='/publicaciones' element={<CompShowAllPublicaciones />} />
+            <Route path='/accounts/password/reset' element={<CompResetPass />} />
             <Route path='/suscribirse' element={<CompProductDisplay />} />
             <Route path='/login' element={<CompLogin />} />
             <Route path='/signin' element={<CompSign />} />
@@ -66,11 +78,22 @@ function App() {
                 <Route path="/admin/publicaciones" element={<CompAdminShowPublicaciones />} />
                 <Route path="/admin/publicaciones/:id" element={<CompAdminEditPublicacion />} />
                 <Route path="/admin/crear-publicacion" element={<CompAddPublicacion />} />
+                <Route path="/admin/usuarios" element={<CompAdminUsers />} />
+                <Route path="/admin/usuarios/crear-usuario" element={<CompAdminAddUser />} />
                 <Route path="/admin/vuelos-desde/:origen" element={<CompResultados />} />
                 <Route path="/admin/vuelos/:origen/:destino" element={<CompResultado />} />
                 <Route path="/admin/vuelo/:origen/:destino" element={<CompVuelo />} />
                 <Route path="/admin/elegir-vuelo/:origen/:destino" element={<CompElegirVuelo />} />
                 <Route path="/admin/carrito" element={<Carrito />} />
+              </>
+            ) : null}
+
+
+            {userRole === 'viewer' ? (
+
+              <>
+                <Route path="/perfil" element={<CompShowProfile />} />
+
               </>
             ) : null}
 

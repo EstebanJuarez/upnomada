@@ -93,9 +93,9 @@ function Carrito() {
     };
 
 
-    const handleVueloDescripcionChange = (id, nuevaDescripcion) => {
+    const handleVueloDescripcionChange = (url, nuevaDescripcion) => {
         const newCarrito = carrito.map((producto) =>
-            producto.id === id ? { ...producto, vueloDescripcion: nuevaDescripcion } : producto
+            producto.url === url ? { ...producto, vueloDescripcion: nuevaDescripcion } : producto
         );
         setCarrito(newCarrito);
         console.log(carrito);
@@ -183,7 +183,7 @@ function Carrito() {
                                 <textarea
                                     className="border rounded-md max-w-xs px-2 py-1 mt-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     value={producto.vueloDescripcion}
-                                    onChange={(event) => handleVueloDescripcionChange(producto.id, event.target.value)}
+                                    onChange={(event) => handleVueloDescripcionChange(producto.url, event.target.value)}
                                 />
 
                             </div>

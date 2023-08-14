@@ -2,13 +2,12 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 function CompPopContainer() {
-
-
     const [email_user, setEmailUser] = useState("");
     const [password_user, setPassword] = useState("");
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [hayToken, setHaytoken] = useState("")
     const [userRole, setUserRole] = useState("")
+    const [datosIncorrectos, setDatosIncorrectos] = useState(false)
     const navigate = useNavigate()
     const token = localStorage.getItem("token")
 
@@ -40,9 +39,15 @@ function CompPopContainer() {
     }, []);
 
     const handleSubmit = async (e) => {
-
-
         e.preventDefault();
+
+        if (!email_user) {
+            return alert("Ingresa un email")
+        }
+
+        if (!password_user) {
+            return alert("Ingresa una contraseña")
+        }
         try {
 
             const response = await axios.post("http://localhost:5000/login", {
@@ -52,8 +57,6 @@ function CompPopContainer() {
             if (response.status === 200) {
                 setIsLoggedIn(true);
                 localStorage.setItem("token", response.data.token);
-                const mitoken = localStorage.getItem("token")
-
                 window.location.reload(); // <- Recarga la página
             }
             if (response.status === 101) {
@@ -63,7 +66,9 @@ function CompPopContainer() {
                 setHaytoken(false)
             }
         } catch (error) {
+            setDatosIncorrectos(true)
             console.error(error);
+
         }
     };
 
@@ -73,7 +78,7 @@ function CompPopContainer() {
         window.location.reload();
     };
     const goToCompras = () => {
-        navigate('/compras')
+        navigate('/perfil')
     }
     const goToAdmin = () => {
         navigate('/admin')
@@ -83,7 +88,7 @@ function CompPopContainer() {
 
     return token ? (
         <div className="buttons-container">
-            <button className='mis-compras-btn' onClick={goToCompras}>Mis compras</button>
+            <button className='mis-compras-btn' onClick={goToCompras}>Mi perfil</button>
             {userRole === "admin" && (
                 <button onClick={goToAdmin} className="mis-compras-btn">Panel de administración</button>
             )}
@@ -121,9 +126,20 @@ function CompPopContainer() {
                     <button type="submit" className="btn-ingresar">Ingresar</button>
 
                 </div>
+                {datosIncorrectos && (
 
+                    <div>
+                        <span className="text-sm text-red-500">Datos incorrectos</span>
+                    </div>
+                )}
+
+             
+                    <Link to={'/accounts/password/reset'} className="login-link ">¿Haz olvidado tu contraseña? </Link>
+           
                 <div>
-                    <Link to={'/signin'} className="login-link ">¿No tenés cuenta? <strong> ¡Creala ahora!</strong></Link>
+                    <Link  to={'/signin'} className="login-link">
+                        ¿No tenés cuenta? <strong> ¡Creala ahora!</strong>
+                    </Link>
                 </div>
             </form>
         </div>

@@ -1,12 +1,12 @@
 
 import express from "express";
 import jwt from "jsonwebtoken";
-import authMiddleware from "../middleware/authMiddleware.js";
+import loggedAuthMiddleware from '../middleware/loggedAuthMiddleware.js'
 import User from "../models/userModel.js";
 
 const roleRoute = express.Router();
 
-roleRoute.get("/role", authMiddleware, async (req, res) => {
+roleRoute.get("/role", loggedAuthMiddleware, async (req, res) => {
   try {
     const user = await User.findByPk(req.user.id);
     res.json({ role: user.role, status: user.status });

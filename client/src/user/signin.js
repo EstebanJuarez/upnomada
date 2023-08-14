@@ -5,19 +5,16 @@ import { Navigate, useNavigate } from "react-router-dom";
 
 
 const CompSign = () => {
-
     const navigate = useNavigate()
     const [isLoggedIn, setIsLoggedIn] = useState(false)
-
     const [userError, setUserError] = useState(false)
     const [passError, setPassError] = useState(false)
+    const [isPolicyChecked, setIsPolicyChecked] = useState(false); // Estado para el checkbox
 
     useEffect(() => {
-
-
         if (localStorage.getItem("token")) {
             navigate('/');
-         }
+        }
     },);
 
 
@@ -42,8 +39,14 @@ const CompSign = () => {
     };
 
     const handleSubmit = async (e) => {
-        if (formValues.password_user === formValues.confirm_password_user) {
+        if (formValues.password_user === formValues.confirm_password_user && isPolicyChecked) { // Verifica que el checkbox esté marcado
             e.preventDefault();
+            const passwordPattern = /^(?=.*[A-Z0-9])(?=.*[a-z]).{6,}$/; // Al menos 6 caracteres, 1 mayúscula y 1 número
+            if (!passwordPattern.test(formValues.password_user)) {
+                e.preventDefault();
+                alert("La contraseña debe tener al menos 6 caracteres y contener al menos una mayúscula o un número");
+                return;
+            }
             try {
                 const response = await axios.post("http://localhost:5000/user/signin", formValues);
                 console.log(response);
@@ -63,9 +66,13 @@ const CompSign = () => {
 
         }
         else {
-            e.preventDefault(); // Evita que el formulario se envíe y la página se recargue
-            alert("las contraseñas no coinciden")
-            setPassError(true)
+            e.preventDefault();
+            if (!isPolicyChecked) {
+                alert("Debes aceptar las políticas de privacidad");
+            } else {
+                alert("Las contraseñas no coinciden");
+                setPassError(true);
+            }
         }
     };
 
@@ -107,7 +114,7 @@ const CompSign = () => {
                             name="email_user"
                             value={formValues.email_user}
                             onChange={handleChange}
-                            className={`w-full mt-1 p-2 border rounded-md focus:ring ${userError ? 'ring-red-200 border-red-500 focus:ring-red-200 focus:border-red-500' : 'ring-blue-200 border-blue-500 focus:ring-blue-200 focus:border-blue-500'}`}
+                            className={`w-full mt-1 p-2 border rounded-md focus:ring ${userError ? 'ring-red-200 border-red-500 focus:ring-red-200 focus:border-red-500' : 'ring-blue-200 border-gray-300 focus:ring-blue-200 focus:border-blue-500'}`}
                         />
                     </label>
                     <label className="block mb-2">
@@ -127,7 +134,7 @@ const CompSign = () => {
                             name="confirm_password_user"
                             value={formValues.confirm_password_user}
                             onChange={handleChange}
-                            className={`w-full mt-1 p-2 border rounded-md focus:ring ${passError ? 'ring-red-200 border-red-500 focus:ring-red-200 focus:border-red-500' : 'ring-blue-200 border-blue-500 focus:ring-blue-200 focus:border-blue-500'}`}
+                            className={`w-full mt-1 p-2 border rounded-md focus:ring ${passError ? 'ring-red-200 border-red-500 focus:ring-red-200 focus:border-red-500' : 'ring-blue-200 border-gray-300 focus:ring-blue-200 focus:border-blue-500'}`}
                         />
                     </label>
 
@@ -144,12 +151,22 @@ const CompSign = () => {
                     </label>
                 </div>
 
-
-
+                <div className="mb-2">
+                    <label className="flex items-center">
+                        <input
+                            type="checkbox"
+                            className="form-checkbox"
+                            checked={isPolicyChecked}
+                            onChange={() => setIsPolicyChecked(!isPolicyChecked)}
+                        />
+                        <span className="ml-2">He leído y acepto las políticas de privacidad</span>
+                    </label>
+                </div>
             </div>
             <button type="submit" className="mt-4 bg-blue-500 hover:bg-jaune hover:text-black transition-all text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                 Enviar
             </button>
+
         </form>
 
 

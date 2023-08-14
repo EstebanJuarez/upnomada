@@ -6,6 +6,8 @@ import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 function CompDashboard() {
     const [userRole, setUserRole] = useState("")
     const [isSubMenuOpen, setIsSubMenuOpen] = useState(false); // Estado para controlar la apertura del submenú
+    const [isUsuariosSubMenuOpen, setIsUsuariosSubMenuOpen] = useState(false);
+
     const navigate = useNavigate();
     const token = localStorage.getItem("token");
 
@@ -13,6 +15,11 @@ function CompDashboard() {
         setIsSubMenuOpen(!isSubMenuOpen);
     }
 
+    const handleUsuariosSubMenuToggle = () => {
+        setIsUsuariosSubMenuOpen(!isUsuariosSubMenuOpen);
+    }
+
+    //FIXME: Añadir el ver y modificar usuarios
     return (
         <div className="flex fixed">
             <div className="">
@@ -40,11 +47,29 @@ function CompDashboard() {
                             )}
                         </AnimatePresence>
                     </div>
-                    <Link className="text-md font-bold text-gray-600">Usuarios</Link >
 
+                    <div className="">
+                        <Link to={"/admin/usuarios"} className="text-md font-bold text-gray-600" onClick={handleUsuariosSubMenuToggle}>Usuarios
+                            <FontAwesomeIcon icon={faAngleDown} className="ml-2" />
+                        </Link>
+                        <AnimatePresence>
+                            {isUsuariosSubMenuOpen && (
+                                <motion.div
+                                    initial={{ opacity: 0, height: 0 }}
+                                    animate={{ opacity: 1, height: "auto" }}
+                                    exit={{ opacity: 0, height: 0 }}
+                                    className="mt-5 "
+                                >
+                                    <Link to={"/admin/usuarios/crear-usuario"} className="text-sm font-bold text-gray-600">
+                                        Crear Usuario
+                                    </Link>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+                    </div>
                 </div>
             </div>
-        </div>
+        </div >
     );
 }
 

@@ -5,12 +5,17 @@ import jwt from "jsonwebtoken";
 import Stripe from "stripe";
 
 import { Op } from "sequelize";
+import dotenv from 'dotenv';
+dotenv.config();
 
-const stripe = new Stripe("sk_test_51NaQrxAzaBsx8xim1OGUlxBkATvhc38jcP7pcG0Pi5D7MoBfoVIV42hmvZDbMbvTF2F2tQrvtV9qGflefySq6Lr700uyv3vNUq");
+const stripeKey = process.env.STRIPE;
+
+
+const stripe = new Stripe(stripeKey);
 
 
 export const createUser = async (req, res) => {
-  const { nombre_user, apellido_user, password_user, email_user, role, telefono_user } = req.body;
+  const { nombre_user, apellido_user, password_user, email_user, role, telefono_user, status } = req.body;
 
   try {
     const existingUser = await User.findOne({
@@ -30,6 +35,7 @@ export const createUser = async (req, res) => {
       telefono_user,
       password_user,
       email_user,
+      status,
       role,
     });
 
@@ -157,6 +163,7 @@ export const registerUser = async (req, res) => {
       // Otros datos del cliente pueden ir aquí, como dirección, etc.
     });
 
+
     // Guardar el customerId de Stripe en la base de datos del usuario
     user.customer_id = customer.id;
     await user.save();
@@ -168,3 +175,26 @@ export const registerUser = async (req, res) => {
   }
 };
 
+export const userGetUserById = async (req, res) => {
+  try {
+    const token = req.header("x-auth-token")
+    if (token) {
+      const decoded = jwt.verify(token, process.env.MI_CLAVE);
+      const id = decoded.user.id;
+      const user = await User.findOne({
+        where: { id_user: id },
+      });
+
+
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      return res.status(200).json(user);
+    }
+  }
+  catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: 'Server Error' });
+  }
+
+}

@@ -219,6 +219,26 @@ export const getPublicaciones = async (req, res) => {
     }
 };
 
+export const getPublicacionesByLimits = async (req, res) => {
+    try {
+        const { offset = 0, limit = 10 } = req.query;
+
+        // Consulta para obtener las publicaciones según offset y limit
+        const publicaciones = await Publicacion.findAll({
+            offset: Number(offset),
+            limit: Number(limit),
+        });
+
+        // Consulta para contar el número total de publicaciones en la tabla
+        const totalCount = await Publicacion.count();
+
+        return res.status(200).json({ publicaciones, totalCount });
+    } catch (error) {
+        console.error("Error al obtener las publicaciones:", error);
+        return res.status(500).json({ message: "Error interno del servidor" });
+    }
+};
+
 export const getLastPublicaciones = async (req, res) => {
     try {
         const publicaciones = await Publicacion.findAll({

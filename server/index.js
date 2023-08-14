@@ -11,6 +11,10 @@ import routerPublicacion from './routes/publicacionRoutes.js';
 import routeUser from './routes/userRoutes.js';
 
 import stripeRoute from './routes/stripeRoute.js';
+
+import emailRoute from './routes/sendMail.js';
+
+import codeRoute from './routes/codeRoutes.js';
 const app = express();
 
 
@@ -35,6 +39,8 @@ app.use('/publicaciones', routerPublicacion)
 
 app.use('/user', routeUser)
 app.use('/role', roleRoute)
+app.use('/send-email', emailRoute)
+app.use('/recovery-code', codeRoute)
 app.post('/login', login);
 
 
